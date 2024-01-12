@@ -45,12 +45,13 @@ class TaskTile extends StatelessWidget {
             value: value,
             onChanged: onChanged,
           ),
-          tileColor: Color(0xFFFFFFFF),
+          tileColor: Theme.of(context).cardColor,
           title: Text(
             text,
             style: TextStyle(
-              decoration: textDecoration,
-            ),
+                decoration: textDecoration,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+                fontWeight: Theme.of(context).textTheme.bodyMedium?.fontWeight),
           ),
         ),
       ),
