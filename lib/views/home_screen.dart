@@ -155,7 +155,6 @@ class HomeScreen extends StatelessWidget {
                           text: taskBox.taskDescription,
                           value: taskBox.isChecked,
                           onChanged: (isChecked) {
-                            print(isChecked);
                             taskBloc.add(
                               ToggleTaskEvent(
                                 index: index,
