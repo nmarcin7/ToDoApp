@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoey/boxes.dart';
 
 class TaskTile extends StatelessWidget {
   final String text;
@@ -37,7 +38,7 @@ class TaskTile extends StatelessWidget {
             ),
           ),
         ),
-        key: Key(text),
+        key: Key(tasksBoxes.keys.toString()),
         onDismissed: onDismissed,
         child: ListTile(
           trailing: Checkbox(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:todoey/boxes.dart';
 import 'package:todoey/controllers/blocs/task_bloc.dart';
-import 'package:todoey/controllers/cubits/theme_cubit.dart';
+import 'package:todoey/models/task.dart';
 import '../widgets/task_textfield.dart';
 import '../widgets/task_tile.dart';
 
@@ -13,7 +15,10 @@ class HomeScreen extends StatelessWidget {
     final taskBloc = TaskBloc();
     final TextEditingController _taskController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text('Tasks'),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
@@ -85,53 +90,85 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state) {
           return SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
                   height: 30.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    'TODAY\'S TASKS',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.listOfTasks.length,
-                    itemBuilder: (context, index) {
-                      final task = state.listOfTasks[index];
-                      return TaskTile(
-                        onDismissed: (DismissDirection) {
-                          taskBloc.add(DeleteTaskEvent(task));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              duration: Duration(seconds: 1),
-                              content: Text(
-                                'Task has been deleted',
-                              ),
+                if (tasksBoxes.isEmpty)
+                  const Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Image(
+                                  image:
+                                      AssetImage('assets/images/sademoji.png'),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'No tasks found',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    color: Color(0xFF9C9C9C),
+                                  ),
+                                )
+                              ],
                             ),
-                          );
-                        },
-                        textDecoration: task.isChecked!
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                        text: task.taskDescription!,
-                        value: task.isChecked!,
-                        onChanged: (isChecked) {
-                          taskBloc.add(
-                            ToggleTaskEvent(
-                                isChecked: task.isChecked!, index: index),
-                          );
-                        },
-                      );
-                    },
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: tasksBoxes.length,
+                      itemBuilder: (context, index) {
+                        // final task = state.listOfTasks[index];
+                        final taskBox = tasksBoxes.getAt(index);
+
+                        return TaskTile(
+                          onDismissed: (DismissDirection) {
+                            taskBloc.add(DeleteTaskEvent(index));
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 1),
+                                content: Text(
+                                  'Task has been deleted',
+                                ),
+                              ),
+                            );
+                          },
+                          textDecoration: taskBox.isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          text: taskBox.taskDescription,
+                          value: taskBox.isChecked,
+                          onChanged: (isChecked) {
+                            print(isChecked);
+                            taskBloc.add(
+                              ToggleTaskEvent(
+                                index: index,
+                                value: Task(
+                                    isChecked: isChecked,
+                                    taskDescription: taskBox.taskDescription),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
               ],
             ),
           );

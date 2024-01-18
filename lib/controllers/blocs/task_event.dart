@@ -6,16 +6,20 @@ abstract class TaskEvent {}
 class AddTaskEvent extends TaskEvent {
   final String textDescription;
   final bool isChecked;
+
   AddTaskEvent(this.textDescription, this.isChecked);
 }
 
 class DeleteTaskEvent extends TaskEvent {
-  final Task task;
-  DeleteTaskEvent(this.task);
+  final int index;
+
+  DeleteTaskEvent(this.index);
 }
 
 class ToggleTaskEvent extends TaskEvent {
-  bool isChecked;
+  // bool isChecked;
+  dynamic value;
   int index;
-  ToggleTaskEvent({required this.isChecked, required this.index});
+
+  ToggleTaskEvent({required this.value, required this.index});
 }

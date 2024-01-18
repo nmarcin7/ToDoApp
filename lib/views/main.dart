@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:hive/hive.dart';
+import 'package:todoey/boxes.dart';
+import 'package:todoey/models/task.dart';
 import 'package:todoey/views/home_screen.dart';
 import 'package:todoey/theme/theme.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(TaskAdapter());
+  tasksBoxes = await Hive.openBox<Task>('tasksBox');
+
   runApp(
     const MyApp(),
   );
