@@ -1,15 +1,12 @@
 part of 'task_bloc.dart';
 
 @immutable
-abstract class TaskState {
-  List<Task> listOfTasks = [];
-  TaskState(this.listOfTasks);
-}
+abstract class TaskState {}
 
-class TaskInitial extends TaskState {
-  TaskInitial(super.listOfTasks);
-}
+class TaskInitial extends TaskState {}
 
-class UpdatedTaskList extends TaskState {
-  UpdatedTaskList(super.listOfTasks);
-}
+class UpdatedTaskState extends TaskState {}
+
+class NewTaskAddedState extends TaskState {}
+
+class TaskDeletedState extends TaskState {}

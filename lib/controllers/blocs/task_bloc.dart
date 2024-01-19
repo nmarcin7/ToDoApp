@@ -10,7 +10,7 @@ part 'task_event.dart';
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
-  TaskBloc() : super(TaskInitial([])) {
+  TaskBloc() : super(TaskInitial()) {
     on<AddTaskEvent>(addTaskEvent);
     on<DeleteTaskEvent>(deleteTaskEvent);
     on<ToggleTaskEvent>(toggleTaskEvent);
@@ -18,31 +18,24 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   FutureOr<void> addTaskEvent(
       AddTaskEvent event, Emitter<TaskState> emitter) async {
-    final task = Task(
-        taskDescription: event.textDescription, isChecked: event.isChecked);
-
-    state.listOfTasks.add(task);
-
     await tasksBoxes.put(
         event.textDescription,
         Task(
             taskDescription: event.textDescription,
             isChecked: event.isChecked));
 
-    emit(UpdatedTaskList(state.listOfTasks));
+    emit(NewTaskAddedState());
   }
 
   FutureOr<void> toggleTaskEvent(
       ToggleTaskEvent event, Emitter<TaskState> emit) async {
     await tasksBoxes.putAt(event.index, event.value);
-
-    emit(UpdatedTaskList(state.listOfTasks));
+    emit(UpdatedTaskState());
   }
 
   FutureOr<void> deleteTaskEvent(
       DeleteTaskEvent event, Emitter<TaskState> emit) async {
     await tasksBoxes.deleteAt(event.index);
-
-    emit(UpdatedTaskList(state.listOfTasks));
+    emit(TaskDeletedState());
   }
 }

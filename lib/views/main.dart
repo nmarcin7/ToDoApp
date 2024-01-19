@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:hive/hive.dart';
 import 'package:todoey/boxes.dart';
 import 'package:todoey/models/task.dart';

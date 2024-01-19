@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Tasks'),
+        title: const Text('Tasks'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
             },
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: BlocBuilder<TaskBloc, TaskState>(
         bloc: taskBloc,
@@ -92,9 +92,6 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 30.0,
-                ),
                 if (tasksBoxes.isEmpty)
                   const Expanded(
                     child: Column(
@@ -133,37 +130,39 @@ class HomeScreen extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: tasksBoxes.length,
                       itemBuilder: (context, index) {
-                        // final task = state.listOfTasks[index];
                         final taskBox = tasksBoxes.getAt(index);
 
-                        return TaskTile(
-                          onDismissed: (DismissDirection) {
-                            taskBloc.add(DeleteTaskEvent(index));
+                        return Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: TaskTile(
+                            onDismissed: (DismissDirection) {
+                              taskBloc.add(DeleteTaskEvent(index));
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                duration: Duration(seconds: 1),
-                                content: Text(
-                                  'Task has been deleted',
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  duration: Duration(seconds: 1),
+                                  content: Text(
+                                    'Task has been deleted',
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          textDecoration: taskBox.isChecked
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                          text: taskBox.taskDescription,
-                          value: taskBox.isChecked,
-                          onChanged: (isChecked) {
-                            taskBloc.add(
-                              ToggleTaskEvent(
-                                index: index,
-                                value: Task(
-                                    isChecked: isChecked,
-                                    taskDescription: taskBox.taskDescription),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                            textDecoration: taskBox.isChecked
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            text: taskBox.taskDescription,
+                            value: taskBox.isChecked,
+                            onChanged: (isChecked) {
+                              taskBloc.add(
+                                ToggleTaskEvent(
+                                  index: index,
+                                  value: Task(
+                                      isChecked: isChecked,
+                                      taskDescription: taskBox.taskDescription),
+                                ),
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
