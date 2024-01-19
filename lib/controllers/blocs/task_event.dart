@@ -17,7 +17,6 @@ class DeleteTaskEvent extends TaskEvent {
 }
 
 class ToggleTaskEvent extends TaskEvent {
-  // bool isChecked;
   dynamic value;
   int index;
 
