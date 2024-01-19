@@ -10,6 +10,7 @@ part 'task_event.dart';
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
+  int _nextId = 0;
   TaskBloc() : super(TaskInitial()) {
     on<AddTaskEvent>(addTaskEvent);
     on<DeleteTaskEvent>(deleteTaskEvent);
@@ -18,8 +19,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   FutureOr<void> addTaskEvent(
       AddTaskEvent event, Emitter<TaskState> emitter) async {
+    _nextId++;
     await tasksBoxes.put(
-        event.textDescription,
+        _nextId,
         Task(
             taskDescription: event.textDescription,
             isChecked: event.isChecked));

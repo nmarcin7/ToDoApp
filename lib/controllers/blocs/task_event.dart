@@ -5,9 +5,10 @@ abstract class TaskEvent {}
 
 class AddTaskEvent extends TaskEvent {
   final String textDescription;
+  final int index;
   final bool isChecked;
 
-  AddTaskEvent(this.textDescription, this.isChecked);
+  AddTaskEvent(this.textDescription, this.isChecked, this.index);
 }
 
 class DeleteTaskEvent extends TaskEvent {

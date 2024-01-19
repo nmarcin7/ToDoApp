@@ -55,7 +55,8 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (_taskController.text.isNotEmpty) {
                             taskBloc.add(
-                              AddTaskEvent(_taskController.text.trim(), false),
+                              AddTaskEvent(
+                                  _taskController.text.trim(), false, 1),
                             );
 
                             _taskController.clear();
@@ -132,37 +133,34 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final taskBox = tasksBoxes.getAt(index);
 
-                        return Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: TaskTile(
-                            onDismissed: (DismissDirection) {
-                              taskBloc.add(DeleteTaskEvent(index));
+                        return TaskTile(
+                          onDismissed: (DismissDirection) {
+                            taskBloc.add(DeleteTaskEvent(index));
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: Text(
-                                    'Task has been deleted',
-                                  ),
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 1),
+                                content: Text(
+                                  'Task has been deleted',
                                 ),
-                              );
-                            },
-                            textDecoration: taskBox.isChecked
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            text: taskBox.taskDescription,
-                            value: taskBox.isChecked,
-                            onChanged: (isChecked) {
-                              taskBloc.add(
-                                ToggleTaskEvent(
-                                  index: index,
-                                  value: Task(
-                                      isChecked: isChecked,
-                                      taskDescription: taskBox.taskDescription),
-                                ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
+                          textDecoration: taskBox.isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          text: taskBox.taskDescription,
+                          value: taskBox.isChecked,
+                          onChanged: (isChecked) {
+                            taskBloc.add(
+                              ToggleTaskEvent(
+                                index: index,
+                                value: Task(
+                                    isChecked: isChecked,
+                                    taskDescription: taskBox.taskDescription),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
